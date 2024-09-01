@@ -42,7 +42,7 @@ function handleCellClick(event) {
                 gameActive = false;
             } else {
                 switchPlayer();
-                setTimeout(computerMove, 500); // Let the computer make its move
+                setTimeout(computerMove, 300); // Faster decision-making
             }
         }
     }
@@ -130,11 +130,14 @@ function findBestMove() {
     let bestVal = -Infinity;
     let bestMove = null;
 
-    for (let col = 0; col < 7; col++) {
+    // Prioritize center columns
+    const columnOrder = [3, 2, 4, 1, 5, 0, 6];
+
+    for (let col of columnOrder) {
         const row = getAvailableRow(col);
         if (row !== null) {
             board[row][col] = 'player2';
-            let moveVal = minimax(board, 0, false, -Infinity, Infinity);
+            let moveVal = minimax(board, 0, false, -Infinity, Infinity, 5); // Limit depth to 5
             board[row][col] = null;
 
             if (moveVal > bestVal) {
@@ -146,10 +149,11 @@ function findBestMove() {
     return bestMove;
 }
 
-function minimax(newBoard, depth, isMaximizing, alpha, beta) {
+function minimax(newBoard, depth, isMaximizing, alpha, beta, maxDepth) {
     if (checkWinState('player2')) return 100 - depth;
     if (checkWinState('player1')) return depth - 100;
     if (newBoard.every(row => row.every(cell => cell !== null))) return 0;
+    if (depth >= maxDepth) return 0; // Stop searching deeper
 
     if (isMaximizing) {
         let maxEval = -Infinity;
@@ -157,7 +161,7 @@ function minimax(newBoard, depth, isMaximizing, alpha, beta) {
             const row = getAvailableRow(col);
             if (row !== null) {
                 newBoard[row][col] = 'player2';
-                let eval = minimax(newBoard, depth + 1, false, alpha, beta);
+                let eval = minimax(newBoard, depth + 1, false, alpha, beta, maxDepth);
                 newBoard[row][col] = null;
                 maxEval = Math.max(maxEval, eval);
                 alpha = Math.max(alpha, eval);
@@ -171,7 +175,7 @@ function minimax(newBoard, depth, isMaximizing, alpha, beta) {
             const row = getAvailableRow(col);
             if (row !== null) {
                 newBoard[row][col] = 'player1';
-                let eval = minimax(newBoard, depth + 1, true, alpha, beta);
+                let eval = minimax(newBoard, depth + 1, true, alpha, beta, maxDepth);
                 newBoard[row][col] = null;
                 minEval = Math.min(minEval, eval);
                 beta = Math.min(beta, eval);
