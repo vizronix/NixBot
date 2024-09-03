@@ -1,6 +1,10 @@
 const userInput = document.getElementById('user-input');
 const messagesContainer = document.getElementById('messages');
 
+const API_KEY = 'YOUR_BRAINSHOP_API_KEY'; // Replace with your actual API key
+const BRAINSHOP_BID = 'YOUR_BID'; // Replace with your bot ID
+const BRAINSHOP_UID = 'YOUR_UID'; // Replace with your user ID
+
 userInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         const userText = userInput.value.trim();
@@ -21,25 +25,20 @@ function addMessage(sender, text) {
 }
 
 function handleCommand(command) {
-    let response = '';
+    // Send the user command to BrainShop API and get the response
+    const url = `https://api.brainshop.ai/get?bid=${BRAINSHOP_BID}&key=${API_KEY}&uid=${BRAINSHOP_UID}&msg=${encodeURIComponent(command)}`;
 
-    switch (command.toLowerCase()) {
-        case 'hello':
-            response = 'Hi there! How can I assist you today?';
-            break;
-        case 'help':
-            response = 'Available commands: hello, time, date, help';
-            break;
-        case 'time':
-            response = `Current time: ${new Date().toLocaleTimeString()}`;
-            break;
-        case 'date':
-            response = `Today's date: ${new Date().toLocaleDateString()}`;
-            break;
-        default:
-            response = 'Unknown command. Type "help" for a list of commands.';
-            break;
-    }
-
-    setTimeout(() => addMessage('bot', response), 500); // Simulate typing delay
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.cnt) {
+                addMessage('bot', data.cnt); // Display the bot's response
+            } else {
+                addMessage('bot', 'Sorry, I did not understand that.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            addMessage('bot', 'An error occurred. Please try again.');
+        });
 }
