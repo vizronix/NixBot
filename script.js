@@ -3,7 +3,7 @@ const messagesContainer = document.getElementById('messages');
 
 const API_KEY = 'p48LpLkKKedF8aOM'; // Replace with your actual API key
 const BRAINSHOP_BID = '181404'; // Replace with your bot ID
-const BRAINSHOP_UID = '0'; // Replace with your user ID
+const BRAINSHOP_UID = '1'; // Replace with your user ID
 
 userInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
