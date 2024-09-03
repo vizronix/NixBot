@@ -1,9 +1,9 @@
 const userInput = document.getElementById('user-input');
 const messagesContainer = document.getElementById('messages');
 
-const API_KEY = 'YOUR_BRAINSHOP_API_KEY'; // Replace with your actual API key
-const BRAINSHOP_BID = 'YOUR_BID'; // Replace with your bot ID
-const BRAINSHOP_UID = 'YOUR_UID'; // Replace with your user ID
+const API_KEY = 'p48LpLkKKedF8aOM'; // Replace with your actual API key
+const BRAINSHOP_BID = '181404'; // Replace with your bot ID
+const BRAINSHOP_UID = '0'; // Replace with your user ID
 
 userInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
